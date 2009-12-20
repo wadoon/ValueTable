@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,14 +7,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import weigl.grammar.rt.TestDialog;
 import weigl.valtab.Parser;
 import weigl.valtab.SyntaxTree;
 
 public class FormulaInput {
 	public static void main(String[] args) throws IOException {
+		//read a valid input
 		SyntaxTree stx = input();
 
+		//get the variables in the formula
 		Set<Character> varlist = stx.getVariables();
 		char[] vars = new char[varlist.size()];
 		{
@@ -25,17 +27,18 @@ public class FormulaInput {
 		int max = 0x1 << vars.length;
 		Map<Character, Boolean> vals = new TreeMap<Character, Boolean>();
 
-		System.out.format(" %c ", 'I');
+		//header output
+		System.out.format(" %c |", 'I');
 		for (char c : vars)
-			System.out.format(" %c ", c);
+			System.out.format(" %c |", c);
 		System.out.println();
 
 		for (int i = 0; i < max; i++) {
-			System.out.format("%2d ", i);
+			System.out.format("%2d |", i);
 			for (int j = 0; j < vars.length; j++) {
 				boolean value = (i & (1 << j)) > 0;
 				vals.put(vars[j], value);
-				System.out.format(" %d ", btoi(value));
+				System.out.format(" %d |", btoi(value));
 			}
 			System.out.format(" %d%n", btoi(stx.evaluate(vals)));
 		}
