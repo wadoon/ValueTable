@@ -1,5 +1,7 @@
 package weigl.grammar.rt;
 
+import java.text.ParseException;
+
 import java.util.Arrays;
 
 import weigl.grammar.rt.PTree.Leaf;
@@ -28,8 +30,9 @@ public abstract class ParserFather implements weigl.grammar.rt.Parser {
 	 * 
 	 * @param c
 	 * @return
+	 * @throws ParseException 
 	 */
-	public Leaf match(char c) {
+	public Leaf match(char c) throws ParseException {
 		if (c == curpos()) {
 			consume();
 			return new PTree.Leaf(new String(new char[] { c }));
@@ -41,10 +44,10 @@ public abstract class ParserFather implements weigl.grammar.rt.Parser {
 	/**
 	 * method for error reporting
 	 * 
-	 * @throws IllegalStateException
+	 * @throws ParseException 
 	 */
-	protected void error() throws IllegalStateException {
-		throw new IllegalStateException("ERROR! expected: []");
+	protected void error() throws ParseException {
+		throw new ParseException("ERROR! expected: []", position);
 	}
 
 	/**
@@ -54,8 +57,8 @@ public abstract class ParserFather implements weigl.grammar.rt.Parser {
 	 *            character that was expected
 	 * @throws IllegalStateException
 	 */
-	protected void error(char c) throws IllegalStateException {
-		throw new IllegalStateException("ERROR! expected: [" + c + "]");
+	protected void error(char c) throws ParseException {
+		throw new ParseException("ERROR! expected: [" + c + "]",position);
 	}
 
 	/**
@@ -65,9 +68,9 @@ public abstract class ParserFather implements weigl.grammar.rt.Parser {
 	 *            characters that were expected
 	 * @throws IllegalStateException
 	 */
-	protected void error(char... c) throws IllegalStateException {
-		throw new IllegalStateException("ERROR! expected: "
-				+ Arrays.toString(c));
+	protected void error(char... c) throws ParseException{
+		throw new ParseException("ERROR! expected: "
+				+ Arrays.toString(c), position);
 	}
 
 	/**
@@ -117,14 +120,16 @@ public abstract class ParserFather implements weigl.grammar.rt.Parser {
 
 	/**
 	 * start method. should only invoke the start symbol of the grammar
+	 * @throws ParseException 
 	 */
-	public abstract void start();
+	public abstract void start() throws ParseException;
 
 	/**
 	 * {@inheritDoc}
+	 * @throws ParseException 
 	 */
 	@Override
-	public void run(String source) {
+	public void run(String source) throws ParseException {
 		reset();
 		input = source.toCharArray();
 		start();

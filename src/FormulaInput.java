@@ -1,17 +1,18 @@
-import java.util.Arrays;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import weigl.grammar.rt.TestDialog;
 import weigl.valtab.Parser;
 import weigl.valtab.SyntaxTree;
 
-public class Start {
-	public static void main(String[] args) {
-		Parser p = new Parser();
-		p.run("abc+cd+ab+(a*-b)");
-		SyntaxTree stx = new SyntaxTree(p.getParseTree());
+public class FormulaInput {
+	public static void main(String[] args) throws IOException {
+		SyntaxTree stx = input();
 
 		Set<Character> varlist = stx.getVariables();
 		char[] vars = new char[varlist.size()];
@@ -37,6 +38,27 @@ public class Start {
 				System.out.format(" %d ", btoi(value));
 			}
 			System.out.format(" %d%n", btoi(stx.evaluate(vals)));
+		}
+	}
+
+	private static SyntaxTree input() throws IOException {
+		Parser p = new Parser();
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		while (true) {
+			System.out.print("Input expression: ");
+			String input = in.readLine();
+			try {
+				p.run(input);
+				SyntaxTree st = new SyntaxTree(p.getParseTree());
+//				TestDialog.showFrame(p.getParseTree());
+				return st;
+			} catch (ParseException e) {
+				System.err.println(input);
+				for (int i = 0; i < e.getErrorOffset() - 1; i++)
+					System.err.print(' ');
+				System.err.println('^');
+				e.printStackTrace();
+			}
 		}
 	}
 

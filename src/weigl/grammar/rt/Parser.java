@@ -1,5 +1,7 @@
 package weigl.grammar.rt;
 
+import java.text.ParseException;
+
 /**
  * Interface for describing a parser.<br>
  * <b>Parsers are not thread-safe</b>
@@ -19,7 +21,8 @@ public interface Parser {
 	/**
 	 * run the parser after the given <pre>source</pre> 
 	 * @param source {@link String} to be parsed
+	 * @throws ParseException 
 	 * @throws IllegalStateException if <pre>source</pre> is not parseable
 	 */
-	public void run(String source);
+	public void run(String source) throws ParseException;
 }

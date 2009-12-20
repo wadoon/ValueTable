@@ -1,7 +1,9 @@
-A: FV
-V: +FV|€
-F: NW
+expr    : term expr_     
+expr_   : => expr expr_ | <=> expr expr_ | % expr expr_ | € 
+term    : factor term_
+term_   : + term term_ | €
+F: negation factor_
 W: *NW|NW|€
 N: -B|B
-B: (A)|I
+B: (H)|I
 I: a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z
