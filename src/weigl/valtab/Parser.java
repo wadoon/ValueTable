@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import weigl.grammar.rt.PTree;
 import weigl.grammar.rt.ParserFather;
+import weigl.grammar.rt.PTree.Leaf;
 import weigl.grammar.rt.PTree.Node;
 
 public class Parser extends ParserFather implements Constants {
@@ -13,7 +14,7 @@ public class Parser extends ParserFather implements Constants {
 	}
 
 	public PTree.Node expr() throws ParseException {
-//		final PTree.Node n = newNode(SYMBOL_EXPR);
+		// final PTree.Node n = newNode(SYMBOL_EXPR);
 		Node n = term();
 		Node m = expr_();
 		m.add(n);
@@ -42,8 +43,8 @@ public class Parser extends ParserFather implements Constants {
 			n.add(term());
 			n.add(expr_());
 			return n;
-		}else 
-			return  newNode("€"); 
+		} else
+			return newNode("€");
 	}
 
 	public PTree.Node braces() throws ParseException {
@@ -53,6 +54,10 @@ public class Parser extends ParserFather implements Constants {
 		if (lookahead("abcdefghijklmnopqrstuvwxyz")) {
 			matched = true;
 			n.add(identifer());
+		}
+		if (lookahead("01")) {
+			matched = true;
+			n.add(constants());
 		} else if (lookahead("(")) {
 			matched = true;
 			// n.add(match('('));
@@ -63,8 +68,23 @@ public class Parser extends ParserFather implements Constants {
 		if (!matched)
 			error('(', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
 					'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
-					'x', 'y', 'z');
+					'x', 'y', 'z', '0', '1');
 
+		return n;
+	}
+
+	private Leaf constants() throws ParseException {
+		final PTree.Node n = new Node(SYMBOL_CONSTANTS);
+		boolean matched = false;
+		if (lookahead("0")) {
+			matched = true;
+			match('0');
+		} else if (lookahead("1")) {
+			matched = true;
+			match('1');
+		}
+		if (!matched)
+			error('0', '1');
 		return n;
 	}
 
@@ -158,6 +178,12 @@ public class Parser extends ParserFather implements Constants {
 		} else if (lookahead("z")) {
 			matched = true;
 			n.add(match('z'));
+		} else if (lookahead("1")) {
+			matched = true;
+			n.add(match('1'));
+		} else if (lookahead("0")) {
+			matched = true;
+			n.add(match('0'));
 		}
 		if (!matched)
 			error('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',

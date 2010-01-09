@@ -25,6 +25,11 @@ public interface Constants {
 	public static final String SYMBOL_BRACES = "B";
 
 	/**
+	 * braces (a)
+	 */
+	public static final String SYMBOL_CONSTANTS = "C";
+
+	/**
 	 * negation -a
 	 */
 	public static final String SYMBOL_NEGATION = "N";

@@ -84,6 +84,8 @@ public class SyntaxTree implements Constants {
 			return new Xor();
 		} else if (s.equals(SYMBOL_IMPL)) {
 			return new Implication();
+		} else if (s.equals(SYMBOL_CONSTANTS)) {
+			return new Constant(s.charAt(0));
 		} else {
 			System.err.println(l);
 		}
@@ -259,6 +261,19 @@ public class SyntaxTree implements Constants {
 			boolean p = list.get(0).valueOf(curVals);
 			boolean k = list.get(1).valueOf(curVals);
 			return !p||k;
+		}
+	}
+	
+	static class Constant extends Value 
+	{
+		public Constant(Character variable) {
+			super(variable);
+			
+		}
+
+		@Override
+		public boolean valueOf(Map<Character, Boolean> curVals) {
+			return getCharacter()=='1';
 		}
 	}
 
